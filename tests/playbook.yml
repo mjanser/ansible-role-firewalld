@@ -1,0 +1,6 @@
+---
+- hosts: all
+  roles:
+    - ansible-role-firewalld
+  vars:
+    firewalld_default_zone: home
