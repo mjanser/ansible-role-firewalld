@@ -1,6 +1,6 @@
 ---
 - hosts: all
   roles:
-    - ansible-role-firewalld
+    - vagrant
   vars:
     firewalld_default_zone: home

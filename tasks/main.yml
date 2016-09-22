@@ -1,21 +1,29 @@
 ---
 - name: ensure firewalld is installed
-  dnf: name="{{ item }}"
+  package:
+    name: "{{ item }}"
   with_items:
     - firewalld
     - firewall-config
 
 - name: ensure firewalld service runs
-  service: name=firewalld enabled=yes state=started
-
-- command: firewall-cmd --get-default-zone
-  register: firewalld_current_default_zone
-  changed_when: false
+  service:
+    name: firewalld
+    enabled: yes
+    state: started
 
 - name: ensure default firewalld zone is set
   command: "firewall-cmd --set-default-zone {{ firewalld_default_zone }}"
-  when: firewalld_current_default_zone.stdout != firewalld_default_zone
+  register: firewalld_set_default_zone
+  changed_when: firewalld_set_default_zone.stdout.find('ZONE_ALREADY_SET') != -1
+  until: firewalld_set_default_zone.rc == 0
+  retries: 2
+  delay: 1
 
 - name: ensure ssh port is closed in public zone of firewalld
-  firewalld: service=ssh zone=public permanent=true state=disabled
+  firewalld:
+    service: ssh
+    zone: public
+    permanent: true
+    state: disabled
   when: ansible_virtualization_role != 'guest'
