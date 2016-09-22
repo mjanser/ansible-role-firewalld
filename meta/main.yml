@@ -6,7 +6,7 @@ galaxy_info:
   min_ansible_version: 2.0
   platforms:
   - name: Fedora
-    versions:
-  categories:
+  tags:
   - system
+  - firewall
 dependencies: []
