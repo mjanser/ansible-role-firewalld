@@ -16,7 +16,7 @@
   command: "firewall-cmd --set-default-zone {{ firewalld_default_zone }}"
   register: firewalld_set_default_zone
   changed_when: firewalld_set_default_zone.stdout.find('ZONE_ALREADY_SET') != -1
-  until: firewalld_set_default_zone.rc == 0
+  until: ansible_check_mode or firewalld_set_default_zone.rc == 0
   retries: 2
   delay: 1
 
