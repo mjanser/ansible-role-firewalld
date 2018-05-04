@@ -5,6 +5,7 @@
   with_items:
     - firewalld
     - firewall-config
+    - python-firewall
 
 - name: ensure firewalld service runs
   service:
@@ -25,5 +26,5 @@
     service: ssh
     zone: public
     permanent: true
+    immediate: true
     state: disabled
-  when: ansible_virtualization_role != 'guest'
